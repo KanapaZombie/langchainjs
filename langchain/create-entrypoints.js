@@ -1,4 +1,5 @@
 import path from "path";
+import url from "url";
 import fs from "fs";
 
 const entrypoints = {
@@ -18,7 +19,7 @@ const entrypoints = {
 
 const updateJsonFile = (relativePath, updateFunction) => {
   const filePath = path.resolve(
-    path.dirname(import.meta.url.replace("file://", "")),
+    path.dirname(url.fileURLToPath(import.meta.url)),
     relativePath
   );
   const contents = fs.readFileSync(filePath).toString();
