@@ -1,12 +1,25 @@
-import crypto from "crypto";
 import { Generation } from "./llms/index.js";
 
 // Takes in an arbitrary number of strings and returns a hash of them
 // that can be used as a key in a cache.
-export const getKey = (...strings: string[]): string => {
-  const hash = crypto.createHash("sha256");
-  strings.forEach((s) => hash.update(s));
-  return hash.digest("hex");
+export const getKey = async (...strings: string[]): Promise<string> => {
+  let _webCrypto;
+  if (typeof crypto === "undefined") {
+    try {
+      _webCrypto = (await import("crypto")).webcrypto;
+    } catch (e) {
+      throw new Error("Please provide a polyfill for the Web Crypto API");
+    }
+  } else {
+    _webCrypto = crypto;
+  }
+
+  const hash = await _webCrypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(strings.join(""))
+  );
+
+  return hash.toString();
 };
 
 export abstract class BaseCache<T = Generation[]> {

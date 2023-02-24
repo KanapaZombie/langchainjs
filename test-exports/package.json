@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "test": "node ./index.mjs && tsc",
-    "test:cf": "wrangler dev index.mjs",
+    "test:cf": "wrangler dev index.ts",
     "test:edge": "vercel dev ./vercel",
     "format": "prettier --write \"**/*.ts\"",
     "format:diff": "prettier --list-different \"**/*.ts\"",

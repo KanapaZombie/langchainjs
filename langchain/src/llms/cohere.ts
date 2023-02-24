@@ -1,3 +1,4 @@
+import type CohereT from "cohere-ai";
 import { LLM, LLMCallbackManager } from "./index.js";
 
 interface CohereInput {
@@ -75,7 +76,7 @@ export class Cohere extends LLM implements CohereInput {
   }
 
   static async imports(): Promise<{
-    cohere: typeof import("cohere-ai");
+    cohere: typeof CohereT;
   }> {
     try {
       const { default: cohere } = await import("cohere-ai");
