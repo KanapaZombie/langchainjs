@@ -29,11 +29,9 @@ const updateJsonFile = (relativePath, updateFunction) => {
 const generateFiles = () => {
   const files = [...Object.entries(entrypoints), ["index", "index"]].flatMap(
     ([key, value]) => {
-      const modulePath =
-        path.basename(value) === "index" ? path.dirname(value) : value;
-      const compiledPath = `./dist/${modulePath}`;
+      const compiledPath = `./dist/${value}.js`;
       return [
-        [`${key}.js`, `export * from './dist/${value}.js'`],
+        [`${key}.js`, `export * from '${compiledPath}'`],
         [`${key}.d.ts`, `export * from '${compiledPath}'`],
       ];
     }
@@ -62,6 +60,7 @@ const updateConfig = () => {
       ["index", ...Object.keys(entrypoints)].map((key) => {
         const entryPoint = {
           import: `./${key}.js`,
+          types: `./${key}.d.ts`,
         };
         return [key === "index" ? "." : `./${key}`, entryPoint];
       })
